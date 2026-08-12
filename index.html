@@ -138,15 +138,14 @@
     <div class="container">
         <div class="header">
             <h2>🤖 دردشة ذكية</h2>
-            <p>مدعومة بنموذج Gemini 3.6 Flash</p>
+            <p>مدعومة بنموذج Gemini 2.5 Flash</p>
         </div>
         
         <div class="model-selector">
             <label style="color: #aaa; font-size: 13px;">النموذج: </label>
             <select id="modelSelect">
-                <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
-                <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
-                <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash Lite</option>
+                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
             </select>
         </div>
         
@@ -238,8 +237,4 @@ input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
 
-// رسالة ترحيب
-addMessage('مرحباً! أنا مساعدك الذكي Gemini. كيف يمكنني مساعدتك اليوم؟', 'bot');
-</script>
-</body>
-</html>
+addMessage('مرحباً! أنا مساعدك الذ
