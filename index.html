@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دردشة ذكية - Gemini</title>
+    <title>دردشة ذكية - Groq</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -27,7 +27,7 @@
         }
         
         .header {
-            background: #4285f4;
+            background: #e94560;
             padding: 20px;
             text-align: center;
             color: white;
@@ -60,7 +60,7 @@
         }
         
         .user {
-            background: #4285f4;
+            background: #e94560;
             color: white;
             margin-right: auto;
             margin-left: 0;
@@ -107,46 +107,22 @@
             padding: 14px 24px;
             border: none;
             border-radius: 25px;
-            background: #4285f4;
+            background: #e94560;
             color: white;
             font-size: 15px;
             cursor: pointer;
             transition: all 0.3s;
         }
         
-        button:hover { background: #5c9cff; transform: scale(1.05); }
+        button:hover { background: #ff6b6b; transform: scale(1.05); }
         button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        
-        .model-selector {
-            padding: 10px 20px;
-            background: #0f3460;
-            text-align: center;
-        }
-        
-        .model-selector select {
-            padding: 8px 15px;
-            border-radius: 10px;
-            border: 1px solid #4285f4;
-            background: #1a1a2e;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h2>🤖 دردشة ذكية</h2>
-            <p>مدعومة بنموذج Gemini 2.5 Flash</p>
-        </div>
-        
-        <div class="model-selector">
-            <label style="color: #aaa; font-size: 13px;">النموذج: </label>
-            <select id="modelSelect">
-                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-                <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-            </select>
+            <p>مدعومة بنموذج Llama 3.1 عبر Groq</p>
         </div>
         
         <div id="chat"></div>
@@ -158,11 +134,13 @@
     </div>
 
 <script>
-let messages = [];
+let messages = [
+    { role: 'system', content: 'أنت مساعد ذكي متعاون. اجب باللغة العربية دائماً ما لم يُطلب منك خلاف ذلك. كن مفيداً وموجزاً.' }
+];
+
 const chat = document.getElementById('chat');
 const input = document.getElementById('input');
 const sendBtn = document.getElementById('sendBtn');
-const modelSelect = document.getElementById('modelSelect');
 
 function addMessage(text, sender) {
     const div = document.createElement('div');
@@ -191,7 +169,7 @@ async function sendMessage() {
     if (!text) return;
     
     addMessage(text, 'user');
-    messages.push({ role: 'user', parts: [{ text: text }] });
+    messages.push({ role: 'user', content: text });
     input.value = '';
     sendBtn.disabled = true;
     showTyping();
@@ -201,8 +179,7 @@ async function sendMessage() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                messages: messages,
-                model: modelSelect.value
+                messages: messages
             })
         });
 
@@ -221,7 +198,7 @@ async function sendMessage() {
 
         const reply = data.candidates[0].content.parts[0].text;
         addMessage(reply, 'bot');
-        messages.push({ role: 'model', parts: [{ text: reply }] });
+        messages.push({ role: 'assistant', content: reply });
 
     } catch (error) {
         hideTyping();
@@ -237,7 +214,7 @@ input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
 
-addMessage('مرحباً! أنا مساعدك الذكي Gemini. كيف يمكنني مساعدتك اليوم؟', 'bot');
+addMessage('مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟', 'bot');
 </script>
 </body>
 </html>
