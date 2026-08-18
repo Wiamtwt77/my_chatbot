@@ -1,220 +1,130 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دردشة ذكية - Groq</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 700px;
-            background: #0f3460;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: #e94560;
-            padding: 20px;
-            text-align: center;
-            color: white;
-        }
-        
-        .header h2 { font-size: 24px; }
-        .header p { font-size: 14px; opacity: 0.9; margin-top: 5px; }
-        
-        #chat {
-            height: 450px;
-            overflow-y: auto;
-            padding: 20px;
-            background: #16213e;
-        }
-        
-        .msg {
-            margin: 12px 0;
-            padding: 14px 18px;
-            border-radius: 18px;
-            max-width: 85%;
-            line-height: 1.6;
-            font-size: 15px;
-            animation: fadeIn 0.3s ease;
-            word-wrap: break-word;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .user {
-            background: #e94560;
-            color: white;
-            margin-right: auto;
-            margin-left: 0;
-            border-bottom-right-radius: 4px;
-        }
-        
-        .bot {
-            background: #1a1a2e;
-            color: #e0e0e0;
-            margin-left: auto;
-            margin-right: 0;
-            border-bottom-left-radius: 4px;
-            border: 1px solid #0f3460;
-        }
-        
-        .typing {
-            color: #888;
-            font-style: italic;
-            font-size: 13px;
-            margin: 10px 0;
-        }
-        
-        .input-area {
-            display: flex;
-            padding: 15px;
-            background: #0f3460;
-            gap: 10px;
-        }
-        
-        #input {
-            flex: 1;
-            padding: 14px 18px;
-            border: none;
-            border-radius: 25px;
-            background: #1a1a2e;
-            color: white;
-            font-size: 15px;
-            outline: none;
-        }
-        
-        #input::placeholder { color: #888; }
-        
-        button {
-            padding: 14px 24px;
-            border: none;
-            border-radius: 25px;
-            background: #e94560;
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        button:hover { background: #ff6b6b; transform: scale(1.05); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bara Animate</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>🤖 دردشة ذكية</h2>
-            <p>مدعومة بنموذج Llama 3.1 عبر Groq</p>
-        </div>
-        
-        <div id="chat"></div>
-        
-        <div class="input-area">
-            <input type="text" id="input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
-            <button id="sendBtn" onclick="sendMessage()">إرسال</button>
-        </div>
+<div class="app">
+  <header>
+    <div class="brand">Bara <span>Animate</span></div>
+    <div class="hint">Choose a style, then drag or rotate a body part.</div>
+    <button id="resetBtn">Reset pose</button>
+  </header>
+
+  <aside class="sidebar">
+    <h2>Character</h2>
+
+    <section>
+      <h3>Hair</h3>
+      <div class="choices">
+        <button class="choice selected" data-hair="hair1">Style 1</button>
+        <button class="choice" data-hair="hair2">Style 2</button>
+      </div>
+    </section>
+
+    <section>
+      <h3>Shirt</h3>
+      <div class="choices">
+        <button class="choice selected" data-shirt="shirt1">Blue</button>
+        <button class="choice" data-shirt="shirt2">Orange</button>
+      </div>
+    </section>
+
+    <section class="help">
+      <h3>How it works</h3>
+      <p>Click a body part to select it.</p>
+      <p>Drag it to move.</p>
+      <p>Use the circular handle to rotate.</p>
+      <p>The character is built from exactly 6 animated parts.</p>
+    </section>
+
+    <section class="parts">
+      <h3>6 Parts</h3>
+      <button data-part="head">Head</button>
+      <button data-part="body">Body</button>
+      <button data-part="leftArm">Left arm</button>
+      <button data-part="rightArm">Right arm</button>
+      <button data-part="leftLeg">Left leg</button>
+      <button data-part="rightLeg">Right leg</button>
+    </section>
+  </aside>
+
+  <main class="workspace">
+    <div class="toolbar">
+      <strong>Canvas</strong>
+      <span id="selectedName">No part selected</span>
     </div>
+    <div id="stage">
+      <svg id="character" viewBox="0 0 600 720" aria-label="Editable cartoon character">
+        <defs>
+          <g id="headShape">
+            <circle cx="300" cy="155" r="108" class="skin"/>
+            <circle cx="257" cy="148" r="14" fill="#fff"/><circle cx="257" cy="148" r="7" fill="#111"/>
+            <circle cx="343" cy="148" r="14" fill="#fff"/><circle cx="343" cy="148" r="7" fill="#111"/>
+            <path d="M282 194 Q300 208 318 194" class="line"/>
+          </g>
 
-<script>
-let messages = [
-    { role: 'system', content: 'أنت مساعد ذكي متعاون. اجب باللغة العربية دائماً ما لم يُطلب منك خلاف ذلك. كن مفيداً وموجزاً.' }
-];
+          <g id="hair1">
+            <path d="M205 125 Q205 43 300 40 Q395 43 395 125 L367 105 L348 125 L326 91 L302 125 L272 90 L248 126 L230 105 Z" class="hair"/>
+          </g>
+          <g id="hair2">
+            <path d="M198 132 Q203 43 300 42 Q399 43 402 132 Q370 100 345 108 Q320 75 300 112 Q275 75 250 108 Q225 100 198 132 Z" class="hair"/>
+            <path d="M225 92 Q300 28 378 90" class="line"/>
+          </g>
 
-const chat = document.getElementById('chat');
-const input = document.getElementById('input');
-const sendBtn = document.getElementById('sendBtn');
+          <g id="bodyShape">
+            <path d="M228 272 Q300 240 372 272 L395 432 Q300 462 205 432 Z" class="shirt"/>
+            <path d="M264 264 Q300 300 336 264" class="line"/>
+          </g>
 
-function addMessage(text, sender) {
-    const div = document.createElement('div');
-    div.className = 'msg ' + sender;
-    div.textContent = text;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-}
+          <g id="leftArmShape">
+            <path d="M224 282 Q185 305 178 370 L165 442 Q164 473 191 476 Q215 475 220 449 L239 365 Q245 320 260 292 Z" class="skin"/>
+          </g>
 
-function showTyping() {
-    const div = document.createElement('div');
-    div.className = 'typing';
-    div.id = 'typing';
-    div.textContent = '... يكتب';
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-}
+          <g id="rightArmShape">
+            <path d="M376 282 Q415 305 422 370 L435 442 Q436 473 409 476 Q385 475 380 449 L361 365 Q355 320 340 292 Z" class="skin"/>
+          </g>
 
-function hideTyping() {
-    const typing = document.getElementById('typing');
-    if (typing) typing.remove();
-}
+          <g id="leftLegShape">
+            <path d="M232 430 L291 430 L282 585 Q276 615 255 625 L190 625 Q175 618 181 599 L225 575 Z" class="pants"/>
+            <path d="M190 625 Q230 605 270 624 L282 651 L173 651 Q164 635 190 625 Z" class="shoe"/>
+            <path d="M177 642 H278" class="line"/>
+          </g>
 
-async function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
-    
-    addMessage(text, 'user');
-    messages.push({ role: 'user', content: text });
-    input.value = '';
-    sendBtn.disabled = true;
-    showTyping();
+          <g id="rightLegShape">
+            <path d="M309 430 L368 430 L375 575 L419 599 Q425 618 410 625 L345 625 Q324 615 318 585 Z" class="pants"/>
+            <path d="M330 624 Q370 605 410 625 Q436 635 427 651 L318 651 L330 624 Z" class="shoe"/>
+            <path d="M322 642 H423" class="line"/>
+          </g>
+        </defs>
 
-    try {
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: messages
-            })
-        });
-
-        hideTyping();
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || 'خطأ ' + response.status);
-        }
-
-        const data = await response.json();
-        
-        if (!data.candidates || !data.candidates[0]) {
-            throw new Error('لم يتم استلام رد');
-        }
-
-        const reply = data.candidates[0].content.parts[0].text;
-        addMessage(reply, 'bot');
-        messages.push({ role: 'assistant', content: reply });
-
-    } catch (error) {
-        hideTyping();
-        addMessage('❌ حدث خطأ: ' + error.message, 'bot');
-        console.error(error);
-    } finally {
-        sendBtn.disabled = false;
-        input.focus();
-    }
-}
-
-input.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-addMessage('مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟', 'bot');
-</script>
+        <g class="part" id="leftLeg" data-label="Left leg" transform="translate(0 0) rotate(0 260 430)">
+          <use href="#leftLegShape"/>
+        </g>
+        <g class="part" id="rightLeg" data-label="Right leg" transform="translate(0 0) rotate(0 340 430)">
+          <use href="#rightLegShape"/>
+        </g>
+        <g class="part" id="leftArm" data-label="Left arm" transform="translate(0 0) rotate(0 240 285)">
+          <use href="#leftArmShape"/>
+        </g>
+        <g class="part" id="rightArm" data-label="Right arm" transform="translate(0 0) rotate(0 360 285)">
+          <use href="#rightArmShape"/>
+        </g>
+        <g class="part" id="body" data-label="Body" transform="translate(0 0) rotate(0 300 350)">
+          <use href="#bodyShape"/>
+        </g>
+        <g class="part" id="head" data-label="Head" transform="translate(0 0) rotate(0 300 260)">
+          <use href="#headShape"/>
+          <use id="hairUse" href="#hair1"/>
+        </g>
+      </svg>
+      <div id="rotateHandle" hidden title="Drag to rotate"></div>
+    </div>
+  </main>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
